@@ -6,10 +6,10 @@ jobs:
     machine:
       image: ubuntu-2004:2022.04.2
     environment:
-      COMMIT_HASH: 'echo $CIRCLE_SHA1 | cut -c -7'  
+      COMMIT_HASH: $(echo $CIRCLE_SHA1 | cut -c -7)  
     steps:
       - checkout
-      - run: sudo apt-get install docker -y
+      #- run: sudo apt-get install docker -y
       - run: echo $COMMIT_HASH
       - run: docker build -t saiakhil46/circleci-build:$COMMIT_HASH .
       - run: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
