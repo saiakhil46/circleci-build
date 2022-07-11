@@ -5,15 +5,15 @@ jobs:
     working_directory: ~/build-image
     machine:
       image: ubuntu-2004:2022.04.2
-    environment:
-      COMMIT_HASH: $(echo $CIRCLE_SHA1 | cut -c -7)  
+    #environment:
+    #  COMMIT_HASH: $(echo $CIRCLE_SHA1 | cut -c -7)  
     steps:
       - checkout
       #- run: sudo apt-get install docker -y
-      - run: echo $COMMIT_HASH
-      - run: docker build -t saiakhil46/circleci-build:$COMMIT_HASH .
+      - run: echo $CIRCLE_SHA1
+      - run: docker build -t saiakhil46/circleci-build:$(echo $CIRCLE_SHA1 | cut -c -7) .
       - run: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-      - run: docker push saiakhil46/circleci-build:$COMMIT_HASH
+      - run: docker push saiakhil46/circleci-build:$(echo $CIRCLE_SHA1 | cut -c -7)
 
 workflows:
   build_flow:
