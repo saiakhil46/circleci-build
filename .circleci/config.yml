@@ -11,9 +11,15 @@ jobs:
       - checkout
       #- run: sudo apt-get install docker -y
       - run: echo $CIRCLE_SHA1
-      - run: docker build -t saiakhil46/circleci-build:$(echo $CIRCLE_SHA1 | cut -c -7) .
-      - run: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-      - run: docker push saiakhil46/circleci-build:$(echo $CIRCLE_SHA1 | cut -c -7)
+      - run:
+          name: Build docker image
+          command: |
+            docker build -t saiakhil46/circleci-build:$(echo $CIRCLE_SHA1 | cut -c -7) .
+      - run:
+          name: Publish Docker Image to Docker Hub
+          command: |
+            echo "$DOCKERHUB_PASSWORD" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin    
+            docker push saiakhil46/circleci-build:$(echo $CIRCLE_SHA1 | cut -c -7)
 
 workflows:
   build_flow:
