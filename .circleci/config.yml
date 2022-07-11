@@ -1,0 +1,21 @@
+version: 2.1
+
+jobs:
+  build:
+    working_directory: ~/build-image
+    machine:
+      image: ubuntu-2204:2022.04.2
+    environment:
+      COMMIT_HASH: << pipeline.git.revision >>  
+    steps:
+      - checkout
+      - run: echo $CIRCLE_SHA1
+      - run: echo $COMMIT_HASH
+      #- run: docker build -t saiakhil46/circleci-build:$COMMIT_HASH .
+      #- run: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+      #- run: docker push saiakhil46/circleci-build:$COMMIT_HASH
+
+workflows:
+  build_flow:
+    jobs:
+      - build     
